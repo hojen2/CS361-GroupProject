@@ -49,6 +49,6 @@ COMMUNICATION CONTRACT
   }
 ]
 
-UML Sequence Diagram:
+---UML Sequence Diagram---
 
 <img width="759" height="1242" alt="UML" src="https://github.com/user-attachments/assets/32ac4d3e-3e49-4f62-ae02-aa08aaf21a3f" />
