@@ -8,18 +8,19 @@ RESPONSE_FILE = "crud_responses.json"
 
 # First, checks that data file exists within directory and if not, creates file
 if not os.path.exists(DATA_FILE):
-    with open(DATA_FILE, "w") as f: # gives program write permissions
-        json.dump([], f) # initializes to empty list
+    with open(DATA_FILE, "w") as f:
+        json.dump([], f)
 
 # Ensure response file exists
 if not os.path.exists(RESPONSE_FILE):
     with open(RESPONSE_FILE, 'w') as f:
-        json.dump([], f)  # initialize as empty JSON list
-        
+        json.dump([], f)
+
 # Ensures request file exists
 if not os.path.exists(REQUEST_FILE):
     with open(REQUEST_FILE, 'w') as f:
         json.dump([], f)
+
 
 # Helper functions
 def load_data():
@@ -27,10 +28,12 @@ def load_data():
     with open(DATA_FILE, "r") as f:
         return json.load(f)
 
+
 def save_data(items):
     # Writes updated list of items back to JSON file
     with open(DATA_FILE, "w") as f:
         json.dump(items, f, indent=2)
+
 
 # Main functions
 def create_item(item):
@@ -43,6 +46,7 @@ def create_item(item):
         'item': item
     }
 
+
 def retrieve_item(item_id=None):
     items = load_data()
     if item_id is None:  # No ID provided, so return full list
@@ -51,6 +55,7 @@ def retrieve_item(item_id=None):
         if item['id'] == item_id:
             return {'status': 'success', 'item': item}
     return {'status': 'error', 'message': 'Item not found.'}
+
 
 def update_item(item_id, updates):
     items = load_data()
@@ -71,24 +76,29 @@ def update_item(item_id, updates):
 def delete_item(item_id):
     items = load_data()
     # Receives a unique item ID and creates a new list excluding that item
-    deleted_item = None
-    new_items = []
-    for item in items:
-        if item['id'] == item_id:
-            deleted_item = item  # save item to include in response
-        else:
-            new_items.append(item)
-
+    new_items, deleted_item = delete_helper(items, item_id)
     # If length of new items list < original list, item was removed; updates data
     if len(new_items) < len(items):
         save_data(new_items)
         return {
             'status': 'success',
             'message': f'Item {item_id} was successfully deleted!',
-            'item': deleted_item  # include deleted item
+            'item': deleted_item
         }
     else:
         return {'status': 'error', 'message': f'Item {item_id} not found.'}
+
+
+def delete_helper(items, item_id):
+    new_items = []
+    deleted_item = None
+    for item in items:
+        if item['id'] == item_id:
+            deleted_item = item
+        else:
+            new_items.append(item)
+    return new_items, deleted_item
+
 
 # Main loop
 print('CRUD microservice running...')
@@ -99,11 +109,11 @@ while True:
             # Attempt to read and parse JSON file and convert to Python list
             try:
                 requests = json.load(f)
-            except json.JSONDecodeError: # Error when data not valid JSON
-                requests = [] # If no valid request, treat as if no requests to process
+            except json.JSONDecodeError:  # Error when data not valid JSON
+                requests = []  # If no valid request, treat as if no requests to process
 
-        if requests: # Program looks for any request to process
-            responses = [] # initialize empty list to store responses from each request
+        if requests:  # Program looks for any request to process
+            responses = []  # initialize empty list to store responses from each request
             for req in requests:
                 # Get command from request (default to empty string if missing)
                 command = req.get('command', '').upper()
@@ -122,7 +132,8 @@ while True:
                     item_id = data.get('id')
                     responses.append(delete_item(item_id))
                 else:
-                    responses.append({'status': 'error', 'message': f'Unknown command {command} sent. Unable to process.'})
+                    responses.append(
+                        {'status': 'error', 'message': f'Unknown command {command} sent. Unable to process.'})
 
             # Program writes responses to response file
             with open(RESPONSE_FILE, 'w') as f:
