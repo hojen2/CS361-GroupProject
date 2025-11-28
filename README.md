@@ -16,7 +16,9 @@ COMMUNICATION CONTRACT
   - UPDATE - provide 'id' of item to update and 'updates' dictionary containing fields and their new values
   - DELETE - provide the 'id' of item to be deleted
 
-- Example Request Call -
+- Example Request Call:
+
+
 [
   {
     'command': 'CREATE',
@@ -35,7 +37,9 @@ COMMUNICATION CONTRACT
   - format: JSON array of response objects
   - generally includes status indicator, message, and object item of request
   
-- Example Response Call -
+- Example Response Call:
+
+
 [
   {
     'status': 'success',
