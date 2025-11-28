@@ -1,6 +1,6 @@
-COMMUNICATION CONTRACT
+### COMMUNICATION CONTRACT
 
----Requesting Data---
+### ---Requesting Data---
 - file: crud_requests.json
 - format: JSON array of request objects
   -    [
@@ -32,7 +32,7 @@ COMMUNICATION CONTRACT
 ]
 
 
----Receiving Data---
+### ---Receiving Data---
   - file: crud_responses.json
   - format: JSON array of response objects
   - generally includes status indicator, message, and object item of request
